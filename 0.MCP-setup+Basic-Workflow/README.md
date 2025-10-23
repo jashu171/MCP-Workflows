@@ -25,21 +25,7 @@ For this guide we’ll use **Airbnb**:
 - Repo: https://github.com/openbnb-org/mcp-server-airbnb  
 
   ![](images/Airbnb-git-repo.png)
-
-**Commands from the Airbnb README**
-
-Respect robots.txt:
-```bash
-npx -y @openbnb/mcp-server-airbnb
-```
-
-Ignore robots.txt (recommended for testing):
-```bash
-npx -y @openbnb/mcp-server-airbnb --ignore-robots-txt
-```
-
-We’ll put these into the n8n credential as **Command** + **Arguments**.
-
+¸
 ---
 
 ## Step 2 — Install the MCP Client (community node)
