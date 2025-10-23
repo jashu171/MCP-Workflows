@@ -16,6 +16,13 @@ For this guide we’ll use **Airbnb**:
 
   ![](0.MCP-setup+Basic-Workflow/images/Airbnb-git-repo.png)
 
+### Open the Airbnb server repo
+Scroll down until this config visible code snippet Copy It
+
+![](0.MCP-setup+Basic-Workflow/images/airbnb.png)
+
+ **You are Good to Go into N8N**
+
 ---
 
 ## Step 2 — Install the MCP Client (community node)
