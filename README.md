@@ -1,5 +1,12 @@
 # Welcome to MCP World 🌍
 
+### What is MCP ?
+
+ MCP (Model Context Protocol) is a standard that lets AI assistants connect to external tools and data sources, call functions, and stream results in a consistent way.
+
+
+![](0.MCP-setup+Basic-Workflow/images/MCP.png)
+
 ---
 Before directly Setp into the N8n workflow few set-up need to complete: (It is very common for any MCP servers)
 
