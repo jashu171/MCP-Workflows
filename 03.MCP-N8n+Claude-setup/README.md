@@ -1,8 +1,13 @@
 # Claude Desktop × n8n (MCP) Model Context Protocol
 ---
-Model context Protocol Visually down  👇🏻
 
-![](images/mcp.png)
+### What is MCP ? 👇🏻
+
+ MCP (Model Context Protocol) is a standard that lets AI assistants connect to external tools and data sources, call functions, and stream results in a consistent way.
+
+
+![](images/MCP.png)
+
 
 > Goal: Connect **Claude Desktop** to an **n8n** workflow via the **MCP Server Trigger** so you can call n8n tools (e.g., Calculator, Send Email) directly from a Claude chat.
 
