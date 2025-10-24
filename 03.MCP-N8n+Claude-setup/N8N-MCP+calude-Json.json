@@ -1,0 +1,183 @@
+{
+  "name": "MCP Own Server",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "Main-server"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        -528,
+        -224
+      ],
+      "id": "370d7025-b60b-4ac0-a96f-01edb631e7f8",
+      "name": "MCP Server Trigger",
+      "webhookId": "91cb0d6c-8b89-4529-bd50-5702d3b65704"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        64
+      ],
+      "id": "73b3f636-5de4-4b7b-9f44-644d908a45d2",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "sendTo": "jashwanthboddupally@gmail.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -288,
+        48
+      ],
+      "id": "02ea3695-8b36-4f1c-b311-3819670bf38d",
+      "name": "Send a message in Gmail",
+      "webhookId": "67bc7668-a1b0-4174-bc48-5476dc06d9dd",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "GnBEvChgjVEoaGsN",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        512
+      ],
+      "id": "7b0fedb9-4a1f-4ea6-a8f7-f815cd4188ec",
+      "name": "Embeddings Mistral Cloud",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "iJMZHjVqywVaclad",
+          "name": "Mistral Cloud account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "value": "vector_store_key",
+          "mode": "list",
+          "cachedResultName": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        -480,
+        304
+      ],
+      "id": "a9cf48b7-82bf-481f-bcb4-e06ce1d0cec8",
+      "name": "Simple Vector Store",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -128,
+        304
+      ],
+      "id": "53edc2e5-5a6f-4f11-b0c2-b179391cd307",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "WwDWqoGrKlKpGptK",
+          "name": "Google Drive account"
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Mistral Cloud": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store": {
+      "ai_tool": [
+        []
+      ],
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5af52c2e-6eac-4d6f-b338-6c4e7dca38b9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d7ad6c4ea91a1987afb780c755fd814280f13ca6d71fb60db59c59cd486300e2"
+  },
+  "id": "3rBXNfRRj8Ry1wfj",
+  "tags": []
+}
