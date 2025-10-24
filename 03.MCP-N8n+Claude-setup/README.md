@@ -192,6 +192,7 @@ If parameters are missing, Claude may ask follow‑up questions.
 
 - Confirm the message arrived. If not, check the **Executions** tab in n8n for errors.
 
+![](images/gmail.png)
 
 ---
 
