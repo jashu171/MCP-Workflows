@@ -1,4 +1,8 @@
-# Claude Desktop × n8n (MCP) — Ultra‑Clear, Step‑Inside‑Steps README
+# Claude Desktop × n8n (MCP) Model Context Protocol
+---
+Model context Protocol Visually down  👇🏻
+
+![](images/mcp.png)
 
 > Goal: Connect **Claude Desktop** to an **n8n** workflow via the **MCP Server Trigger** so you can call n8n tools (e.g., Calculator, Send Email) directly from a Claude chat.
 
