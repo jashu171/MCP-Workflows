@@ -92,7 +92,7 @@ If the file does not exist, **create it**.
 }
 ```
 
-![Config snippet (copy/paste reference)](images/config-copy-code.png)
+---
 
 ![Example of a correct config in editor](images/example-config-code.png)
 
@@ -167,6 +167,11 @@ You expose tools by connecting **tool nodes** in the same workflow as the **MCP 
 ![Claude shows the local MCP server running](images/claude-desktop-checking-running.png)
 
 ---
+### check the Connector status 
+
+![Turn on the n8n tool in a new Claude chat](images/connected-tools-in-claude.png)
+
+---
 
 ## 10) Use It in a New Chat
 
@@ -178,7 +183,8 @@ You expose tools by connecting **tool nodes** in the same workflow as the **MCP 
 
 If parameters are missing, Claude may ask follow‑up questions.
 
-![Turn on the n8n tool in a new Claude chat](images/connected-tools-in-claude.png)
+![Example: Gmail message sent successfully from Claude via n8n](images/claude+n8n-output.png)
+
 
 ---
 
@@ -186,7 +192,6 @@ If parameters are missing, Claude may ask follow‑up questions.
 
 - Confirm the message arrived. If not, check the **Executions** tab in n8n for errors.
 
-![Example: Gmail message sent successfully from Claude via n8n](images/claude+n8n-output.png)
 
 ---
 
@@ -207,10 +212,6 @@ If parameters are missing, Claude may ask follow‑up questions.
 - Check OAuth scopes and the selected **From** identity.
 - Verify the **To** address, Subject/Message fields, and credentials.
 - Check n8n **Executions** logs for the Gmail node.
-
-**Windows tips**
-- JSON escaping: `\\\\` in file paths.
-- Use quotes around args with spaces when launching tools directly (not needed in the JSON arrays above).
 
 ---
 
@@ -241,17 +242,6 @@ If parameters are missing, Claude may ask follow‑up questions.
 }
 ```
 
----
-
-## Appendix B — Quick Verification Commands
-
-```bash
-# 1) Verify your SSE endpoint streams events
-curl -N <YOUR_N8N_MCP_PRODUCTION_SSE_URL>
-
-# 2) JSON validate with jq (macOS path example)
-jq . < "${HOME}/Library/Application Support/Claude/claude_desktop_config.json" > /dev/null && echo "JSON OK"
-```
 
 ---
 
