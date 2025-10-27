@@ -53,7 +53,7 @@ Scroll down until this config visible code snippet Copy It
 
 ---
 
-![Example of a correct config in editor](images/example-config-code.png)
+![Example of a correct config in editor](03.MCP-N8n+Claude-setup/images/example-config-code.png)
 
 
 ---
