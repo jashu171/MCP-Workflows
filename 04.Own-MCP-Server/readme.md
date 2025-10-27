@@ -170,7 +170,7 @@ Below, each node includes **Purpose**, **Configuration**, and a quick **Verify**
 ---
 ### N8n Output :
 
- Result: ![send-output](simages/send-mail-output.png)
+ Result: ![send-output](images/send-mail-output.png)
 
 
 
