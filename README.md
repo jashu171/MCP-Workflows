@@ -56,7 +56,7 @@ Scroll down until this config visible code snippet Copy It
 ![Example of a correct config in editor](03.MCP-N8n+Claude-setup/images/example-config-code.png)
 
 ---
-#### Config for both (SSE & HTTP) : 
+# Config for both (SSE & HTTP) : 
 
    - Replace **`<Replace with your link>`** with the **Production MCP URL** you copied in *2.1*.  
    - Replace **`<Replace with your link/sse>`** with the **SSE URL** (usually your Production URL + `/sse`).  
@@ -83,7 +83,7 @@ Try both ways hhtp/sse if one fails another comes in place
 --- 
 ### sample 
 
-![](images/config.png)
+![](04.Own-MCP-Server/images/config.png)
 
 ---
 
