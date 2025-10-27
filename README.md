@@ -55,6 +55,35 @@ Scroll down until this config visible code snippet Copy It
 
 ![Example of a correct config in editor](03.MCP-N8n+Claude-setup/images/example-config-code.png)
 
+---
+#### Config for both (SSE & HTTP) : 
+
+   - Replace **`<Replace with your link>`** with the **Production MCP URL** you copied in *2.1*.  
+   - Replace **`<Replace with your link/sse>`** with the **SSE URL** (usually your Production URL + `/sse`).  
+
+Try both ways hhtp/sse if one fails another comes in place 
+
+```json
+{
+  "mcpServers": {
+    "n8n-prod": {
+      "command": "npx",
+      "args": ["-y","supergateway","--logLevel","debug","--streamableHttp","<Replace with your link>"]
+    },
+    "n8n-sse": {
+      "command": "npx",
+      "args": ["-y","supergateway","--logLevel","debug","--sse","<Replace with your link/sse>"]
+    }
+  }
+}
+```
+
+
+> 💡 **Tip:** If you only want one transport, you can keep **`n8n-prod`** (HTTP) and delete the **`n8n-sse`** block.
+--- 
+### sample 
+
+![](images/config.png)
 
 ---
 
