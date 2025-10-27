@@ -1,7 +1,7 @@
 # N8N Workflow Documentation: MCP Gmail Server
 
 ## 1. GOAL
-This workflow lets an AI agent (via MCP—Model Context Protocol) manage Gmail using plain‑English instructions. It can **send** emails, **reply** in a thread, **delete** messages, and **fetch** recent messages—beginner‑friendly and hands‑free.
+This workflow lets an AI agent (via MCP—Model Context Protocol) manage Gmail using plain‑English instructions. It can **send** emails, **reply** in a thread, **delete** messages, and **fetch** recent mails.
 
 ---
 
@@ -35,6 +35,8 @@ Follow these steps **in order**. Each step ends with a **Verify** checklist so y
    - Replace **`<Replace with your link/sse>`** with the **SSE URL** (usually your Production URL + `/sse`).  
    - Keep the flags as shown (they help you debug).
 
+Try both ways hhtp/sse if one fails another comes in place 
+
 ```json
 {
   "mcpServers": {
@@ -51,7 +53,6 @@ Follow these steps **in order**. Each step ends with a **Verify** checklist so y
 ```
 
 **Verify**
-- No red error banner appears after saving.  
 - If Claude shows a JSON error, paste your URL again (watch for extra spaces or missing quotes).
 
 > 💡 **Tip:** If you only want one transport, you can keep **`n8n-prod`** (HTTP) and delete the **`n8n-sse`** block.
@@ -64,7 +65,6 @@ Follow these steps **in order**. Each step ends with a **Verify** checklist so y
 
 **Verify**
 - The workflow badge shows **Active**.  
-- Opening **Executions** shows no recent “failed to register webhook” errors.
 
 > ⚠ **Common mistake:** Forgetting to activate means Claude cannot reach your trigger in Production.
 
@@ -76,7 +76,7 @@ Follow these steps **in order**. Each step ends with a **Verify** checklist so y
 3. **Reopen** Claude Desktop.
 
 **Verify**
-- In **Claude → Dev Tools**, logs show the gateway starting (`supergateway … connected`) and **no connection errors**.
+- In **Claude → Dev Tools**, logs show the gateway starting (`supergateway … running`) and **no connection errors**.
 
 > ⚠ On Windows, other restart methods often do **not** apply MCP config changes. Use **Task Manager**.
 
@@ -84,7 +84,7 @@ Follow these steps **in order**. Each step ends with a **Verify** checklist so y
 
 #### 2.5 **Connection Health Check** (Dev Tools)
 1. Open **Claude → Dev Tools**.  
-2. Look for lines like **“connecting to …/webhook/MCP-locally”** and **“connected”**.  
+2. Look for lines like **“Running to …/webhook/MCP-locally”** and **“connected”**.  
 3. If you see HTTP errors:  
    - **404** → wrong URL path (double‑check **`MCP-locally`**).  
    - **401/403** → workflow not active or access blocked.  
@@ -100,6 +100,9 @@ Follow these steps **in order**. Each step ends with a **Verify** checklist so y
 [**MCP Server Trigger**] → [**Think2**] → [**Delete a message in Gmail**] → [**Reply to a message in Gmail**] → [**Send a message in Gmail**] → [**Send message and wait for response in Gmail**] → [**Get many messages in Gmail**] → [**Calculator**]
 
 > The MCP Trigger exposes all Gmail actions; the agent calls the right node based on your instruction.
+
+
+- Canvas overview: ![canvas](images/canvas.png)
 
 ---
 
@@ -149,6 +152,12 @@ Below, each node includes **Purpose**, **Configuration**, and a quick **Verify**
 3. Confirm the email is removed and the node returns `success: true` in **Executions**.
 
 ---
+### Output :
+
+- Delete example: ![delete-output](images/delete-mail.png)
+
+
+---
 
 ### Node 4: Reply to a message in Gmail — *Gmail Tool*
 **Purpose:** Sends a plain‑text reply in an existing thread.
@@ -170,6 +179,17 @@ Below, each node includes **Purpose**, **Configuration**, and a quick **Verify**
 1. Use **Get many messages in Gmail** to fetch a thread’s `id`.  
 2. Ask Claude: “**Reply to the message with Message_ID `<id>` and say _Thanks, received!_.**”  
 3. Check Gmail: the reply appears in the thread; **Executions** show status 200 from Gmail.
+
+---
+### claude prompt :
+
+- Reply prompt: ![reply-prompt](images/reply-mail-prompt.png)  
+
+--- 
+### Output :
+
+- Result: ![reply-output](images/reply-mail-output.png)
+
 
 ---
 
@@ -195,6 +215,17 @@ Below, each node includes **Purpose**, **Configuration**, and a quick **Verify**
 1. Ask Claude: “**Send a test email to me** `<you@example.com>` **with subject** `MCP test` **and body** `Hello!`.**  
 2. In Gmail, confirm the outbound message exists.  
 3. In **Executions**, the node returns a Gmail message object (with `id`, `threadId`).
+
+---
+
+### claude Desktop Input :
+
+- Send email prompt: ![send-prompt](images/send-mail-prompt.png)  
+
+---
+### N8n Output :
+
+ Result: ![send-output](simages/send-mail-output.png)
 
 ---
 
@@ -244,44 +275,6 @@ Below, each node includes **Purpose**, **Configuration**, and a quick **Verify**
 
 ---
 
-## 5. TROUBLESHOOTING
+ 
 
-### Error: **Invalid Credentials / 401** (Gmail nodes)
-**Why this happens:** Gmail OAuth credential is missing, expired, or lacks scope.  
-**How to fix**
-1. In n8n, **Credentials → Gmail OAuth2 → Reconnect**.  
-2. Ensure your Google Cloud project has **Gmail API** enabled and redirect URL:  
-   `https://<your-n8n-domain>/rest/oauth2-credential/callback`  
-3. Re‑run **Send a message in Gmail** as a smoke test.
-
----
-
-### Workflow **not triggering** from Claude
-- **Check:** Workflow is **Active** in n8n.  
-- **Verify:** MCP URLs in Claude config match **MCP‑locally** path.  
-- **Test:** Open **Claude → Dev Tools**; look for **connected** logs and then try:  
-  “**Send a test email to `<you@example.com>` with subject `Ping`.**”
-
----
-
-### Data **not flowing** (`To`/`Subject`/`Message` empty)
-- **Inspect:** `$fromAI('To'|'Subject'|'Message'|'Message_ID'|'Limit')` usage in each node.  
-- **Common issue:** The agent prompt didn’t produce fields; the overrides stay empty.  
-- **Solution:** Be explicit in your instruction to Claude (e.g., “**Use field names: To, Subject, Message**”). Check **Executions** to see resolved values.
-
----
-
-### Can’t **delete** or **reply** (wrong ID)
-- **Symptom:** Gmail node returns “not found” or acts on a different email.  
-- **Fix:** Use **`{{$json.id}}`** from **Get many messages in Gmail**. Do **not** use the RFC “Message‑ID” header.
-
----
-
-## Optional: Screenshots (for this bundle)
-- Canvas overview: ![canvas](sandbox:/mnt/data/canvas.png)
-- Send email prompt: ![send-prompt](sandbox:/mnt/data/send-mail-prompt.png)  
-  Result: ![send-output](sandbox:/mnt/data/send-mail-output.png)
-- Reply prompt: ![reply-prompt](sandbox:/mnt/data/reply-mail-prompt.png)  
-  Result: ![reply-output](sandbox:/mnt/data/reply-mail-output.png)
-- Delete example: ![delete-output](sandbox:/mnt/data/delete-mail.png)
 
