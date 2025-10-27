@@ -30,6 +30,31 @@ Scroll down until this config visible code snippet Copy It
 
  **You are Good to Go into N8N**
 
+ ---
+ ##  Paste this **working** config (SSE- only) (via Supergateway)
+
+> Replace `<YOUR_N8N_MCP_PRODUCTION_SSE_URL>` with your **Production** MCP URL from the **MCP Server Trigger** node (Step 6).
+
+```json
+{
+  "mcpServers": {
+    "n8n": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "supergateway",
+        "--sse",
+        "<YOUR_N8N_MCP_PRODUCTION_SSE_URL>"
+      ]
+    }
+  }
+}
+```
+
+---
+
+![Example of a correct config in editor](images/example-config-code.png)
+
 
 ---
 
