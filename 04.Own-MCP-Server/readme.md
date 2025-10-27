@@ -1,4 +1,4 @@
-# N8N Workflow Documentation: MCP Gmail Server
+# N8N OWN MCP Gmail Server + Claude Desktop 
 
 ## 1. GOAL
 This workflow lets an AI agent (via MCP—Model Context Protocol) manage Gmail using plain‑English instructions. It can **send** emails, **reply** in a thread, **delete** messages, and **fetch** recent mails.
@@ -56,6 +56,10 @@ Try both ways hhtp/sse if one fails another comes in place
 - If Claude shows a JSON error, paste your URL again (watch for extra spaces or missing quotes).
 
 > 💡 **Tip:** If you only want one transport, you can keep **`n8n-prod`** (HTTP) and delete the **`n8n-sse`** block.
+--- 
+### sample 
+
+![](images/config.png)
 
 ---
 
@@ -134,66 +138,7 @@ Below, each node includes **Purpose**, **Configuration**, and a quick **Verify**
 
 ---
 
-### Node 3: Delete a message in Gmail — *Gmail Tool*
-**Purpose:** Deletes a specific Gmail message.
-
-**Configuration**
-- **Operation:** `delete`  
-- **Message ID (string):**
-```n8n
-={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}
-```
-> ✅ **Correct ID Source:** Use the **`id`** field returned by **Get many messages in Gmail** (Node 7).  
-> ❌ **Do not** use the RFC “Message‑ID” email header.
-
-**Verify**
-1. Run **Get many messages in Gmail** with a small **Limit** (e.g., 5).  
-2. Copy `{{$json.id}}` from a target email and pass it as **Message_ID** via your agent.  
-3. Confirm the email is removed and the node returns `success: true` in **Executions**.
-
----
-### Output :
-
-- Delete example: ![delete-output](images/delete-mail.png)
-
-
----
-
-### Node 4: Reply to a message in Gmail — *Gmail Tool*
-**Purpose:** Sends a plain‑text reply in an existing thread.
-
-**Configuration**
-- **Operation:** `reply`  
-- **Message ID (string):**
-```n8n
-={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}
-```
-- **Email Type:** `text`  
-- **Message (string):**
-```n8n
-={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}
-```
-- **Options → appendAttribution:** `false`
-
-**Verify**
-1. Use **Get many messages in Gmail** to fetch a thread’s `id`.  
-2. Ask Claude: “**Reply to the message with Message_ID `<id>` and say _Thanks, received!_.**”  
-3. Check Gmail: the reply appears in the thread; **Executions** show status 200 from Gmail.
-
----
-### claude prompt :
-
-- Reply prompt: ![reply-prompt](images/reply-mail-prompt.png)  
-
---- 
-### Output :
-
-- Result: ![reply-output](images/reply-mail-output.png)
-
-
----
-
-### Node 5: Send a message in Gmail — *Gmail Tool*
+### Node 3: Send a message in Gmail — *Gmail Tool*
 **Purpose:** Sends a standard outbound email.
 
 **Configuration**
@@ -227,9 +172,12 @@ Below, each node includes **Purpose**, **Configuration**, and a quick **Verify**
 
  Result: ![send-output](simages/send-mail-output.png)
 
+
+
+
 ---
 
-### Node 6: Send message and wait for response in Gmail — *Gmail Tool*
+### Node 4: Send message and wait for response in Gmail — *Gmail Tool*
 **Purpose:** Sends an email and **waits for a reply** to continue automation.
 
 **Configuration**
@@ -247,6 +195,65 @@ Below, each node includes **Purpose**, **Configuration**, and a quick **Verify**
 3. In **Executions**, observe the workflow resumes after the reply is detected.
 
 > 💡 If nothing resumes, confirm the workflow is **Active** and that the Gmail credential has necessary scopes.
+
+---
+
+### Node 5: Reply to a message in Gmail — *Gmail Tool*
+**Purpose:** Sends a plain‑text reply in an existing thread.
+
+**Configuration**
+- **Operation:** `reply`  
+- **Message ID (string):**
+```n8n
+={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}
+```
+- **Email Type:** `text`  
+- **Message (string):**
+```n8n
+={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}
+```
+- **Options → appendAttribution:** `false`
+
+**Verify**
+1. Use **Get many messages in Gmail** to fetch a thread’s `id`.  
+2. Ask Claude: “**Reply to the message with Message_ID `<id>` and say _Thanks, received!_.**”  
+3. Check Gmail: the reply appears in the thread; **Executions** show status 200 from Gmail.
+
+---
+### claude prompt :
+
+- Reply prompt: ![reply-prompt](images/reply-mail-prompt.png)  
+
+--- 
+### Output :
+
+- Result: ![reply-output](images/reply-mail-output.png)
+
+---
+
+### Node 6: Delete a message in Gmail — *Gmail Tool*
+**Purpose:** Deletes a specific Gmail message.
+
+**Configuration**
+- **Operation:** `delete`  
+- **Message ID (string):**
+```n8n
+={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}
+```
+> ✅ **Correct ID Source:** Use the **`id`** field returned by **Get many messages in Gmail** (Node 7).  
+> ❌ **Do not** use the RFC “Message‑ID” email header.
+
+**Verify**
+1. Run **Get many messages in Gmail** with a small **Limit** (e.g., 5).  
+2. Copy `{{$json.id}}` from a target email and pass it as **Message_ID** via your agent.  
+3. Confirm the email is removed and the node returns `success: true` in **Executions**.
+
+---
+### Output :
+
+- Delete example: ![delete-output](images/delete-mail.png)
+
+
 
 ---
 
