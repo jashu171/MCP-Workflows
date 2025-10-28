@@ -2,17 +2,14 @@
 
 **Workflow ID/Name:** `MCP+N8n-AI-agent-workflow`
 
-This guide documents an n8n workflow where a chat user can **create, list, update, or delete Google Calendar events** using natural language. The AI Agent (Gemini) interprets the message, calls the correct Calendar tool via **MCP**, and fills all fields deterministically with copy-paste expressions you’ll find below.
+This guide documents an n8n workflow where a chat user can **create, list, update, or delete Google Calendar events** using natural language. The AI Agent (Gemini) interprets the message, calls the correct Calendar tool via **MCP**.
 
 ---
 
 ## Table of Contents
 - [Goal](#goal)
-- [Architecture](#architecture)
 - [Prerequisites](#prerequisites)
   - [Required Accounts & Access](#required-accounts--access)
-  - [API Keys & Credentials (exact steps)](#api-keys--credentials-exact-steps)
-  - [OAuth (what/where)](#oauth-whatwhere)
 - [Canvas Wiring](#canvas-wiring)
 - [Workflow Steps (Node by Node)](#workflow-steps-node-by-node)
   - [Node 1 — When chat message received (Trigger)](#node-1--when-chat-message-received-trigger)
@@ -43,16 +40,6 @@ Enable a chat user to manage Google Calendar by typing natural language, e.g.:
 
 The **AI Agent** understands the message and calls the right Calendar tool automatically.
 
----
-
-## Architecture
-
-**One-line flow:**  
-`[When chat message received] → [AI Agent (Gemini + Simple Memory + MCP Client Tool)] → [Calendar MCP (Trigger)] → [Google Calendar Tools: Create | Get many | Update | Delete]`
-
-- **AI Agent** = Orchestrator (interprets user message, chooses tool, fills fields).
-- **Calendar MCP** = Tool Hub (exposes the 4 Calendar tool nodes to the agent).
-- **Tool Nodes**: Create event, Get many events, Update event, Delete event.
 
 ---
 
@@ -64,29 +51,6 @@ The **AI Agent** understands the message and calls the right Calendar tool autom
 - **Google Cloud project** (to configure OAuth for Calendar)
 - **Google Gemini API key** (for the chat model)
 - **MCP server endpoint** reachable from n8n (HTTP or SSE gateway, e.g., **Supergateway**)
-
-### API Keys & Credentials (exact steps)
-
-| Service | Credential Type | How to Get It (exact path) | Where to Paste in n8n | ⚠ Notes |
-|---|---|---|---|---|
-| Google Calendar | OAuth2 | **Google Cloud Console** → *APIs & Services* → *Credentials* → **Create Credentials** → **OAuth client ID** → Type: **Web application** → Add **Authorized redirect URI**: `https://<YOUR-N8N-DOMAIN>/rest/oauth2-credential/callback` → Save Client ID/Secret | **Credentials** → *Google Calendar OAuth2 API* | Ensure **Google Calendar API** is **Enabled** in *APIs & Services*. Redirect URI must match **exactly**. |
-| Google Gemini | API Key | **Google AI Studio** → **Get API key** → Copy | **Credentials** → *Google PaLM/Gemini API* (used by the Gemini Chat Model node) | Keep it secret; rotate if exposed. |
-| MCP Gateway | HTTP/SSE endpoint | If using **Supergateway**: `npx -y supergateway --logLevel debug --streamableHttp <BASE>` (or `--sse <URL>`) | In **MCP Client Tool** node → *Endpoint URL* | Replace `localhost` when n8n runs in Docker/VM. Confirm connectivity from n8n host. |
-
-### OAuth (what/where)
-
-**What is OAuth?** A secure way for n8n to access your Google Calendar on your behalf without storing your password.
-
-**Callback URL (copy this format):**
-```
-https://<YOUR-N8N-DOMAIN>/rest/oauth2-credential/callback
-```
-
-**Where to add in Google Cloud**  
-*APIs & Services* → *Credentials* → your OAuth client → **Authorized redirect URIs** → Add the URL above → Save.
-
-**Where to use in n8n**  
-*Credentials* → **Google Calendar OAuth2 API** → paste **Client ID/Secret** → **Connect** and complete OAuth.
 
 ---
 
@@ -156,6 +120,9 @@ You are a calendar operations orchestrator.
 - **Type:** `@n8n/n8n-nodes-langchain.memoryBufferWindow`
 - **Purpose:** Keeps recent turns so the Agent remembers context (e.g., event title mentioned earlier).
 - **Config:** `contextWindowLength = 50`
+
+---
+# MCP Part : 
 
 ### Node 5 — MCP server (MCP Client Tool)
 - **Type:** `@n8n/n8n-nodes-langchain.mcpClientTool`
@@ -252,7 +219,7 @@ http://localhost:5678/mcp/MCP-locally
 ```
 
 **Result (example):**  
-![get events](images/Get-events.png)
+![get events](images/Get-events.png) 
 
 ### Node 10 — Update an event in Google Calendar (Tool)
 - **Type:** `n8n-nodes-base.googleCalendarTool` (**operation:** `update`)
@@ -348,6 +315,15 @@ Start, End, Summary, Description, Limit, After, Before, Event_ID
 
 ---
 
+
+# OutPut:
+![chat input](images/Chat-inpt.png)
+![event created](images/Calendar-event-created.png)
+![get events](images/Get-events.png) 
+![delete event](images/delete-events.png)
+
+
+
 ## Appendix — Node Types Recap
 
 - **Trigger:** `@n8n/n8n-nodes-langchain.chatTrigger`  
@@ -361,7 +337,7 @@ Start, End, Summary, Description, Limit, After, Before, Event_ID
 ---
 
 ## Contributors
-- _Add your name here_
+- _Jashwanth_
 
 ## License
 _Choose a license (e.g., MIT) and place it here._
