@@ -1,0 +1,528 @@
+{
+  "name": "MCP-explorium",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1JfUJ3E0hevU3laYzaGUxULYT-SbBmxOEJVK-tD71qVI",
+          "mode": "list",
+          "cachedResultName": "n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JfUJ3E0hevU3laYzaGUxULYT-SbBmxOEJVK-tD71qVI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 454044254,
+          "mode": "list",
+          "cachedResultName": "Explorium DATA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JfUJ3E0hevU3laYzaGUxULYT-SbBmxOEJVK-tD71qVI/edit#gid=454044254"
+        },
+        "includeInOutput": "both",
+        "options": {}
+      },
+      "id": "3bc1957e-076f-4931-b5b9-1ee106a937f5",
+      "name": "Google Sheets Trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "position": [
+        -1632,
+        -128
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "JWFFEvL6O6rY52Ea",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 1,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "8c7d5b8a-4569-4c8f-b5e8-6c5f5e5c5e5c",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              },
+              "leftValue": "={{ $json.comapny }}",
+              "rightValue": ""
+            },
+            {
+              "id": "9d8e6c9b-5670-5d9f-c6f9-7d6g6f6d6f6d",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              },
+              "leftValue": "={{ $json['website URL'] }}",
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a64518ed-5106-44ec-9475-af43d91519c6",
+      "name": "Filter Valid Rows",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -1328,
+        -128
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "2997289d-4809-4fdb-8fbf-87496d096cf4",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -1024,
+        -368
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "jsCode": "// Simply pass through the AI output with proper formatting\nreturn {\n  name: $json.output.name || $json.name,\n  website: $json.output.website || $json.website,\n  business_id: $json.output.business_id || '',\n  naics: $json.output.naics || '',\n  number_of_employees_range: $json.output.number_of_employees_range || '',\n  yearly_revenue_range: $json.output.yearly_revenue_range || ''\n};"
+      },
+      "id": "105a622f-30ce-42c9-a2af-0ad18ece1c95",
+      "name": "Code - Format Output",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        288,
+        -352
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1JfUJ3E0hevU3laYzaGUxULYT-SbBmxOEJVK-tD71qVI",
+          "mode": "list",
+          "cachedResultName": "n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JfUJ3E0hevU3laYzaGUxULYT-SbBmxOEJVK-tD71qVI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 454044254,
+          "mode": "list",
+          "cachedResultName": "Explorium DATA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JfUJ3E0hevU3laYzaGUxULYT-SbBmxOEJVK-tD71qVI/edit#gid=454044254"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "comapny": "={{ $json.name }}",
+            "website URL": "={{ $json.website }}",
+            "Bussiness ID": "={{ $json.business_id }}",
+            "Naics": "={{ $json.naics }}",
+            "No Of Employees Range": "={{ $json.number_of_employees_range }}",
+            "Yearly revenue": "={{ $json.yearly_revenue_range }}"
+          },
+          "matchingColumns": [
+            "comapny"
+          ],
+          "schema": [
+            {
+              "id": "comapny",
+              "displayName": "comapny",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "website URL",
+              "displayName": "website URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Bussiness ID",
+              "displayName": "Bussiness ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Naics",
+              "displayName": "Naics",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "No Of Employees Range",
+              "displayName": "No Of Employees Range",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Yearly revenue",
+              "displayName": "Yearly revenue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "445040fe-7c3a-4b2b-bacb-0d0b8afbaa34",
+      "name": "Update Company Row",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        400,
+        48
+      ],
+      "typeVersion": 4.5,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SoHpJYpDRosdTPQh",
+          "name": "sheets Office n8n setup"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Enrich Company Data from Google Sheets with Explorium MCP\n\nThis workflow automatically enriches company data when new rows are added or when the name/website fields are updated in your Google Sheet.",
+        "height": 280,
+        "width": 460,
+        "color": 3
+      },
+      "id": "745c1f48-b1ef-4fc3-9e9f-06cbf1ef88b2",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1248,
+        320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"name\": \"Microsoft Corporation\",\n    \"website\": \"https://www.microsoft.com\",\n    \"business_id\": \"a34bacf839b923770b2c360eefa26748\",\n    \"naics\": \"511210\",\n    \"number_of_employees_range\": \"10001+\",\n    \"yearly_revenue_range\": \"100B-1T\"\n}",
+        "autoFix": true
+      },
+      "id": "fba53cdb-e1ce-453f-b395-21bedaec270f",
+      "name": "Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        -128,
+        -112
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "### Workflow Structure:\n\n**Google Sheets Trigger** → **Filter Valid Rows** → **Loop Over Items**\n                                                          ↓\n                                                      **AI Agent**\n                                                           ↓\n                                                   **Code - Format Output**\n                                                           ↓\n                                                   **Update Company Row**\n                                                           ↓\n                                                   (back to Loop Over Items)",
+        "height": 280,
+        "width": 460
+      },
+      "id": "64a35822-ba1a-40f5-931c-b72b1ee5c1bb",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -640,
+        352
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### How the Loop Works:\n1. Loop Over Items splits the batch (size 1)\n2. Sends one item to AI Agent\n3. AI Agent enriches the data\n4. Code formats the output\n5. Google Sheets updates the row\n6. Flow returns to Loop Over Items for next item\n7. When all items are processed, loop ends\n\n### Key Points:\n- Each row is processed individually\n- The loop continues until all rows are done\n- Failed enrichments won't stop other rows\n\n### Testing:\n1. Add multiple rows with company names and websites\n2. Trigger the workflow\n3. Watch each row get processed sequentially\n4. All rows should be updated with enriched data",
+        "height": 460,
+        "width": 460,
+        "color": 4
+      },
+      "id": "745bd23e-13c5-4c03-a66b-97aa79623507",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        288
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You will be provided with company information including:\n\nName: {{ $json.comapny }}\nDomain: {{ $json['website URL'] }}\n\n\n\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Your task is to research and extract the following key business metrics for this company:\nNote : Reduce the Token Size below 6000k tokens\nRequired Data Points:\n- Name (keep the same as provided)\n- Website (keep the same as provided)\n- Annual revenue (as business_id first, then get the range)\n- Number of employees (range)\n- NAICS code\n\nUse the Explorium tools to:\n1. First use match-business to find the business ID\n2. Then use enrich-businesses-firmographics to get the company details\n\nReturn the data exactly in this format."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -432,
+        -352
+      ],
+      "id": "986cd5cd-057a-4e9c-9848-7a11046555a7",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.comapny }}",
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -544,
+        -16
+      ],
+      "id": "aa1330c1-0cb7-4765-9874-d950c1ffa9c5",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -16
+      ],
+      "id": "3bbeae91-dff0-4d20-94d4-9783fd9fff74",
+      "name": "MCP Client1",
+      "credentials": {
+        "mcpClientApi": {
+          "id": "RFOsXPdaTLUg7slB",
+          "name": "MCP Client (STDIO) account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        -96
+      ],
+      "id": "092355f1-a02c-471e-93f1-e1e92fa910d4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "o1yvYdsTMwd04brT",
+          "name": "Gemini 2.5-flash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        80
+      ],
+      "id": "f4198d68-2943-4d65-b4ef-5ddbcf6a98f5",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "H1EYoYJiYdnPFswd",
+          "name": "global-n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Explorium MCP Tool",
+        "height": 1296,
+        "width": 2496,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1872,
+        -432
+      ],
+      "typeVersion": 1,
+      "id": "73708395-c550-4a2e-abe1-2ce1ae18af44",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Valid Rows": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Company Row": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Update Company Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter Valid Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a0e10250-0916-46e8-9e1d-ea9b77668674",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dea0691859c9aeb717420e8c6ea2b1a347ba82ac56d40cedc9406e5f2667166"
+  },
+  "id": "qHPHdmPFVGopIp9J",
+  "tags": []
+}
