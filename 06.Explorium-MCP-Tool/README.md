@@ -1,6 +1,6 @@
 # MCP – Explorium Firmographics Enrichment (Google Sheets → AI Agent → Sheets)
 
-Beginner-friendly guide to build an **n8n** workflow that enriches firmographics using an **AI Agent** with **Explorium MCP** tools and writes results back to the **same Google Sheet**—fully automatic.
+
 
 > ⚠️ **Do not “fix” header spellings** in your sheet. The mapping depends on them **exactly as written** below.
 
