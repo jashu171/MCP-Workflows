@@ -12,7 +12,6 @@ Beginner-friendly guide to build an **n8n** workflow that enriches firmographics
 - [Prerequisites](#prerequisites)
   - [Required Accounts & Access](#required-accounts--access)
   - [API Keys & Credentials in n8n](#api-keys--credentials-in-n8n)
-  - [OAuth Quick Note](#oauth-quick-note)
   - [MCP Client Setup Options (Explorium)](#mcp-client-setup-options-explorium)
 - [Canvas Wiring (One-Line View)](#canvas-wiring-one-line-view)
 - [Workflow Steps (Node-by-Node, Copy-Paste)](#workflow-steps-node-by-node-copy-paste)
@@ -31,9 +30,6 @@ Beginner-friendly guide to build an **n8n** workflow that enriches firmographics
 - [Example Input & Output](#example-input--output)
 - [Features](#features)
 - [Dependencies](#dependencies)
-- [Configuration Notes & Tips](#configuration-notes--tips)
-- [Security Notes](#security-notes)
-- [Links](#links)
 - [Contributors](#contributors)
 - [License](#license)
 
@@ -62,11 +58,17 @@ A drag-and-drop **n8n** automation:
 ```
 
 **Canvas view (reference):**  
-![n8n workflow canvas showing nodes and loop](./canvas.png)
+![n8n workflow canvas showing nodes and loop](images/canvas.png)
 
 ---
 
 ## Prerequisites
+
+## Links
+- **Explorium MCP GitHub (NPX/STDIO option):** https://github.com/explorium-ai/mcp-explorium  
+- **Explorium Integrations (API key for HTTP/SSE client):** https://admin.explorium.ai/integrations
+
+---
 
 ### Required Accounts & Access
 - **n8n** (Cloud or self-hosted) with **AI nodes enabled**.
@@ -82,9 +84,12 @@ A drag-and-drop **n8n** automation:
 - **Explorium MCP** available to the Agent (via one of the client options below).
 
 > ⚠️ Do not change header spellings. They must match **exactly**.
+---
 
 **Example Sheet (with exact headers):**  
-![Google Sheet with required headers and sample rows](./sheet-data.png)
+![Google Sheet with required headers and sample rows](images/sheet-data.png)
+
+---
 
 ### API Keys & Credentials in n8n
 - **Google Sheets (OAuth2)**  
@@ -94,12 +99,7 @@ A drag-and-drop **n8n** automation:
 - **MCP Client (choose one)**  
   *Settings → Credentials → MCP Client (STDIO / HTTP / SSE) → Configure per your chosen option.*
 
-### OAuth Quick Note
-OAuth lets n8n access your Google Sheets without storing your password.  
-**Callback URL (exact format):**
-```
-https://your-n8n-instance.com/rest/oauth2-credential/callback
-```
+---
 
 ### MCP Client Setup Options (Explorium)
 
@@ -111,7 +111,7 @@ https://your-n8n-instance.com/rest/oauth2-credential/callback
   - **Arguments:** `-y mcp-remote https://mcp.explorium.ai/mcp`
 
 **Credential example (screenshot):**  
-![n8n MCP Client (STDIO) credential using npx mcp-remote](./MCP-config.png)
+![n8n MCP Client (STDIO) credential using npx mcp-remote](images/MCP-config.png)
 
 - Equivalent JSON config (reference):
 ```json
@@ -422,35 +422,12 @@ Yearly revenue: 100B-1T
   - `match-business`
   - `enrich-businesses-firmographics`
 
----
 
-## Configuration Notes & Tips
-- **Polling interval**: 1–5 minutes is common. Lower intervals = more API calls.
-- **Session Memory**: Using `{{ $json.comapny }}` isolates memory per company during the loop.
-- **Parser**: Keep the schema concise; downstream mapping assumes those six fields.
-- **Costs/quotas**: Gemini + Explorium usage incurs API costs—monitor in their dashboards.
-- **Sheet access**: Ensure the OAuth’d Google account can read/write the spreadsheet.
-
----
-
-## Security Notes
-- Store **all API keys** in **n8n Credentials**, not inside nodes.
-- Restrict access to your n8n instance and credential editing.
-- If using HTTP/SSE MCP, prefer **header-based** API key injection via the credential form.
-
----
-
-## Links
-- **Explorium MCP GitHub (NPX/STDIO option):** https://github.com/explorium-ai/mcp-explorium  
-- **Explorium Integrations (API key for HTTP/SSE client):** https://admin.explorium.ai/integrations
 
 ---
 
 ## Contributors
-Add yourself and reviewers here:
-- Your Name (@handle) — author
+
+- Jashwanth-Botcampus.ai
 
 ---
-
-## License
-Add your license here (e.g., MIT).
